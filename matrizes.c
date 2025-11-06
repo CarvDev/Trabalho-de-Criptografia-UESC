@@ -1,5 +1,4 @@
 #include "matrizes.h"
-#include <stdio.h>
 
 int gerar_num() {
     int num = rand() % 30 + 1;
@@ -8,38 +7,35 @@ int gerar_num() {
 }
 
 void preencher_mat_cript(int mat[MAT][MAT]) {   
-    while (1) {
-        for (int linha = 0; linha < MAT; linha++) {
-            
-            for (int coluna = 0; coluna < MAT; coluna++) {
-                mat[linha][coluna] = gerar_num();
-            }
+    
+    for (int linha = 0; linha < MAT; linha++) {
+        
+        for (int coluna = 0; coluna < MAT; coluna++) {
+            mat[linha][coluna] = gerar_num();
         }
-
-        // verificando se os produtos não são iguais (para evitar futuro erro de divisão por zero)
-        int a, b, c, d;
-        a = mat[0][0];
-        b = mat[1][0];
-        c = mat[0][1];
-        d = mat[1][1];
-
-        if ((a * d) != (b * c)) break;
     }
 } 
 
-
 int calcular_determinante(int mat[MAT][MAT]) {
     int determinante;
-    int a = mat [0][0];
-    int b = mat [1][0];
-    int c = mat [0][1];
-    int d = mat [1][1];
 
-    determinante = (a * d) - (b * c);
+    while (1) {
+        int a = mat [0][0];
+        int b = mat [1][0];
+        int c = mat [0][1];
+        int d = mat [1][1];
+        
+        determinante = (a * d) - (b * c);
+        
+        if (determinante != 0) {
+            break;
+        } else {
+            preencher_mat_cript(mat);
+        }
+    }
 
     return determinante;
 }
-
 
 void preencher_mat_decript(int mat_cript[MAT][MAT], float mat_decript[MAT][MAT]) {
     //calculando determinante:
@@ -57,7 +53,6 @@ void preencher_mat_decript(int mat_cript[MAT][MAT], float mat_decript[MAT][MAT])
     for (int linha = 0; linha < MAT; linha++) {
     
         for (int coluna = 0; coluna < MAT; coluna++) {
-            
             mat_decript [linha][coluna] = (mat_adjunta [linha][coluna] / determinante);
         }
     }
@@ -68,7 +63,6 @@ void imprimir_matriz_float(float (*mat)[MAT]) {
     for (int linha = 0; linha < MAT; linha++) {
     
         for (int coluna = 0; coluna < MAT; coluna++) {
-            
             printf("%.2f ", mat[linha][coluna]);
         }
         printf("\n");
@@ -80,7 +74,6 @@ void imprimir_matriz_int(int (*mat)[MAT]) {
     for (int linha = 0; linha < MAT; linha++) {
         
         for (int coluna = 0; coluna < MAT; coluna++) {
-            
             printf("%d ", mat[linha][coluna]);
         }
         printf("\n");

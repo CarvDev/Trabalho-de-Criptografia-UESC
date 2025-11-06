@@ -1,12 +1,11 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include <locale.h>
 #include "menu.h"
 #include "matrizes.h"
 
 int main(void) {
+    // funções básicas para o funcionamento do prorgama:
     setlocale(LC_ALL, "Portuguese"); // para usar acentos, etc.
-    srand(time(NULL));
+    srand(time(NULL)); // para os números aleatórios. NÃO REMOVER DO main()!!!
 
     // declarando variáveis globais:
     int opcao;
@@ -21,10 +20,7 @@ int main(void) {
             case 1:
                 // preenchendo matrizes
                 preencher_mat_cript(matriz_cript);
-                imprimir_matriz_int(matriz_cript);
-
                 preencher_mat_decript(matriz_cript, matriz_decript);
-                imprimir_matriz_float(matriz_decript);
 
                 break;
             case 2:
