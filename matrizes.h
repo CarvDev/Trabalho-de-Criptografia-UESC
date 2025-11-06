@@ -14,7 +14,7 @@ int gerar_num();
 void preencher_mat_cript(int mat[MAT][MAT]);
 
 // essa função calcula a determinante
-int cacular_determinante(int mat[MAT][MAT]);
+int calcular_determinante(int mat[MAT][MAT]);
 
 // essa função calcula a matriz de descriptografia
 void preencher_mat_decript(int mat_cript[MAT][MAT], float mat_decript[MAT][MAT]);
