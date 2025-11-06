@@ -1,4 +1,6 @@
 #include "matrizes.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 int gerar_num() {
     int num = rand() % MAX + MIN;
