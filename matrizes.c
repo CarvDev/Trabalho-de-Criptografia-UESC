@@ -1,29 +1,29 @@
 #include "matrizes.h"
+#include <stdio.h>
 
 int gerar_num() {
-    srand(time(NULL));
     int num = rand() % 30 + 1;
     
     return num;
 }
 
-void preencher_matriz_cript(int matriz[ELEMENTOS_MATRIZ][ELEMENTOS_MATRIZ]) {
-    for (int linha = 0; linha < ELEMENTOS_MATRIZ; linha++) {
+void preencher_mat_cript(int mat[MAT][MAT]) {
+    for (int linha = 0; linha < MAT; linha++) {
     
-        for (int coluna = 0; coluna < ELEMENTOS_MATRIZ; coluna++) {
-            matriz[linha][coluna] = gerar_num();
+        for (int coluna = 0; coluna < MAT; coluna++) {
+            mat[linha][coluna] = gerar_num();
         }
     }
 }
 
 
-int calcular_determinante(int matriz[ELEMENTOS_MATRIZ][ELEMENTOS_MATRIZ]) {
+int calcular_determinante(int mat[MAT][MAT]) {
     int determinante;
     
-    int a = matriz [0][0];
-    int b = matriz [1][0];
-    int c = matriz [0][1];
-    int d = matriz [1][1];
+    int a = mat [0][0];
+    int b = mat [1][0];
+    int c = mat [0][1];
+    int d = mat [1][1];
 
     determinante = (a * d) - (b * c);
 
@@ -31,17 +31,48 @@ int calcular_determinante(int matriz[ELEMENTOS_MATRIZ][ELEMENTOS_MATRIZ]) {
 }
 
 
-void preencher_matriz_decript(int matriz_cript[ELEMENTOS_MATRIZ][ELEMENTOS_MATRIZ]) {
+void preencher_mat_decript(int mat_cript[MAT][MAT], float mat_decript[MAT][MAT]) {
     //calculando determinante:
-    int determinante = calcular_determinante(matriz_cript);
+    int determinante = calcular_determinante(mat_cript);
 
     // calculando adjunta
-    int a = matriz_cript[1][1];
-    int b = -1 * matriz_cript[0][1];
-    int c = -1 * matriz_cript[1][0];
-    int d = matriz_cript[0][0];
+    int a = mat_cript[1][1];
+    int b = -1 * mat_cript[0][1];
+    int c = -1 * mat_cript[1][0];
+    int d = mat_cript[0][0];
 
-    int adjunta[] = {a, b, c, d};
+    float mat_adjunta[MAT][MAT] = {{a, b}, {c, d}};
 
     //calculando inversa
+    for (int linha = 0; linha < MAT; linha++) {
+    
+        for (int coluna = 0; coluna < 0; coluna++) {
+            
+            mat_decript [linha][coluna] = (mat_adjunta [linha][coluna] / determinante);
+        }
+    }
+}
+
+void imprimir_matriz_float(float (*mat)[MAT]) {
+
+    for (int linha = 0; linha < MAT; linha++) {
+    
+        for (int coluna = 0; coluna < MAT; coluna++) {
+            
+            printf("%.2f ", mat[linha][coluna]);
+        }
+        printf("\n");
+    }
+}
+
+void imprimir_matriz_int(int (*mat)[MAT]) {
+    
+    for (int linha = 0; linha < MAT; linha++) {
+        
+        for (int coluna = 0; coluna < MAT; coluna++) {
+            
+            printf("%d ", mat[linha][coluna]);
+        }
+        printf("\n");
+    }
 }
