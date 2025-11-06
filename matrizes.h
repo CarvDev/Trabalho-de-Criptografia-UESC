@@ -1,7 +1,9 @@
 #ifndef MATRIZES_H
 #define MATRIZES_H
 
-#define MAT 2 // constante que define o número de termos da matriz, horizontal e verticalmente
+#define MIN 1 // número mínimo capaz de ser gerado aleatoriamente para a matriz
+#define MAX 30 // número máximo capaz de ser gerado aleatoriamente para a matriz
+#define MAT 2 // número de termos da matriz, horizontal e verticalmente (não mexer por enquanto)
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>

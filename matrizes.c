@@ -1,13 +1,13 @@
 #include "matrizes.h"
 
 int gerar_num() {
-    int num = rand() % 30 + 1;
+    int num = rand() % MAX + MIN;
     
     return num;
 }
 
 void preencher_mat_cript(int mat[MAT][MAT]) {   
-    
+
     for (int linha = 0; linha < MAT; linha++) {
         
         for (int coluna = 0; coluna < MAT; coluna++) {
@@ -27,6 +27,7 @@ int calcular_determinante(int mat[MAT][MAT]) {
         
         determinante = (a * d) - (b * c);
         
+        // um caso de verificação, para evitar que o determinante seja 0. Se acontecer, gera nova matriz
         if (determinante != 0) {
             break;
         } else {
