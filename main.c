@@ -8,7 +8,7 @@
 int main(void) {
     // funções básicas para o funcionamento do prorgama:
     setlocale(LC_ALL, "Portuguese"); // para usar acentos, etc.
-    srand(time(NULL)); // para os números aleatórios. NÃO REMOVER DO main()!!!
+    srand(time(NULL)); // semente para os números aleatórios. NÃO REMOVER DO main()!!!
 
     // declarando variáveis globais:
     int opcao;

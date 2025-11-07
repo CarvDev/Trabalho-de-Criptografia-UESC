@@ -9,16 +9,16 @@
 int gerar_num();
 
 // preenche a matriz com os números aleatórios gerados
-void preencher_mat_cript(int mat[MAT][MAT]);
+void preencher_mat_cript(int (*mat)[MAT]);
 
 // calcula a determinante
-int calcular_determinante(int mat[MAT][MAT]);
+int calcular_determinante(int (*mat)[MAT]);
 
 // calcula a matriz de descriptografia
-void preencher_mat_decript(int mat_cript[MAT][MAT], float mat_decript[MAT][MAT]);
+void preencher_mat_decript(int (*mat_cript)[MAT], float (*mat_decript)[MAT]);
 
 // imprime matrizes (só para testes)
-void imprimir_matriz_float(float mat[MAT][MAT]);
-void imprimir_matriz_int(int mat[MAT][MAT]);
+void imprimir_matriz_float(float (*mat)[MAT]);
+void imprimir_matriz_int(int (*mat)[MAT]);
 
 #endif
