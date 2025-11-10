@@ -9,14 +9,7 @@ int gerar_num() {
 }
 
 int calcular_determinante(int (*mat)[MAT]) {
-    int determinante;
-
-        int a = mat [0][0];
-        int b = mat [1][0];
-        int c = mat [0][1];
-        int d = mat [1][1];
-        determinante = (a * d) - (b * c);
-
+    int determinante = (mat [0][0] * mat [1][1]) - (mat [1][0] * mat [0][1]);
     return determinante;
 }
 
@@ -30,8 +23,8 @@ void preencher_mat_cript(int (*mat)[MAT]) {
             }
         }
 
-    } while (calcular_determinante(mat) == 0); //recria a matriz, caso o seu determinante seja 0
-    // isso evita que uma futura divisão por 0
+    } while (calcular_determinante(mat) == 0); 
+    //recria a matriz, caso o seu determinante seja 0, evitando uma futura divisão por 0
 } 
 
 
@@ -39,7 +32,7 @@ void preencher_mat_decript(int (*mat_cript)[MAT], float (*mat_decript)[MAT]) {
     //calculando determinante:
     int determinante = calcular_determinante(mat_cript);
 
-    // calculando matriz adjunta
+    // calculando matriz adjunta:
         int a = mat_cript[1][1];
         int b = -1 * mat_cript[0][1];
         int c = -1 * mat_cript[1][0];
