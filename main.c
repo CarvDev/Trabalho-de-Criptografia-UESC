@@ -4,6 +4,7 @@
 #include <time.h>
 #include "menu.h"
 #include "matrizes.h"
+#include "criptografia.h"
 
 int main(void) {
     // funções básicas para o funcionamento do prorgama:
@@ -14,6 +15,7 @@ int main(void) {
     int opcao;
     int matriz_cript[MAT][MAT];
     float matriz_decript[MAT][MAT];
+    
 
     do {
         mostra_menu();
