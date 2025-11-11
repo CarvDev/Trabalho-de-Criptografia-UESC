@@ -5,18 +5,19 @@
 #include "menu.h"
 #include "matrizes.h"
 #include "criptografia.h"
+#include "auxiliar.h"
 
 int main(void) {
     // funções básicas para o funcionamento do prorgama:
     setlocale(LC_ALL, "Portuguese"); // para usar acentos, etc.
-    srand(time(NULL)); // semente para os números aleatórios. NÃO REMOVER DO main()!!!
+    srand(time(NULL)); // semente para os números aleatórios.
 
     // declarando variáveis globais:
     int opcao;
     int matriz_cript[MAT][MAT];
     float matriz_decript[MAT][MAT];
     char texto[500];
-    int tamanho_texto;
+    int tamanho_texto = sizeof(texto);
     int marcadores[2][500];
     int texto_numerado[2][500];
     char* texto_cripto;
@@ -34,6 +35,7 @@ int main(void) {
                 preencher_mat_cript(matriz_cript);
                 preencher_mat_decript(matriz_cript, matriz_decript);
 
+                printf("\n[Matriz criada com sucesso!]\n");
                 break;
             case 2:
                 obter_texto(texto, &tamanho_texto, marcadores);
