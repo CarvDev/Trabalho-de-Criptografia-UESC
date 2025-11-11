@@ -1,7 +1,7 @@
 #ifndef MATRIZES_H
 #define MATRIZES_H
 
-#define MAT 2 // número de termos da matriz, horizontal e verticalmente (não mexer por enquanto)
+#define MAT 2 // número de termos da matriz, horizontal e verticalmente
 
 // preenche a matriz com os números aleatórios gerados
 void preencher_mat_cript(int (*mat)[MAT]);
