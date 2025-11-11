@@ -1,12 +1,6 @@
 #include "matrizes.h"
-#include <stdlib.h>
 #include <stdio.h>
-
-int gerar_num() {
-    int num = rand() % MAX + MIN;
-    
-    return num;
-}
+#include "auxiliar.h"
 
 int calcular_determinante(int (*mat)[MAT]) {
     int determinante = (mat [0][0] * mat [1][1]) - (mat [1][0] * mat [0][1]);
@@ -26,7 +20,6 @@ void preencher_mat_cript(int (*mat)[MAT]) {
     } while (calcular_determinante(mat) == 0); 
     //recria a matriz, caso o seu determinante seja 0, evitando uma futura divisão por 0
 } 
-
 
 void preencher_mat_decript(int (*mat_cript)[MAT], float (*mat_decript)[MAT]) {
     //calculando determinante:
