@@ -23,7 +23,7 @@ void preencher_mat_cript(int (*mat)[MAT]) {
 
 void preencher_mat_decript(int (*mat_cript)[MAT], float (*mat_decript)[MAT]) {
     //calculando determinante:
-    int determinante = calcular_determinante(mat_cript);
+    float determinante = (float)calcular_determinante(mat_cript);
 
     // calculando matriz adjunta:
         int a = mat_cript[1][1];
@@ -46,7 +46,7 @@ void imprimir_matriz_float(float (*mat)[MAT]) {
     for (int linha = 0; linha < MAT; linha++) {
     
         for (int coluna = 0; coluna < MAT; coluna++) {
-            printf("%.2f ", mat[linha][coluna]);
+            printf("%.4f ", mat[linha][coluna]);
         }
         printf("\n");
     }
