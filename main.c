@@ -1,4 +1,3 @@
-
 #include <locale.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,7 +6,6 @@
 #include "matrizes.h"
 #include "criptografia.h"
 #include "auxiliar.h"
-#include <wchar.h>
 
 int main(void) {
     // funções básicas para o funcionamento do prorgama:
