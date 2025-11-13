@@ -1,12 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <wchar.h>
 
 #define MIN 1 // número mínimo capaz de ser gerado aleatoriamente
 #define MAX 28 // número máximo capaz de ser gerado aleatoriamente
 
 void limpar_buffer() {
-    int c;
-    while ((c = getchar()) != '\n' && c != EOF);
+    wint_t c; // wint_t para "wide int type"
+    
+    // Lê e descarta todos os caracteres até encontrar o '\n'
+    while ((c = getwchar()) != L'\n' && c != WEOF);
 }
 
 int gerar_num() {
@@ -17,8 +20,9 @@ int gerar_num() {
 
 void limpar_tela(int op) {
     if (op == 1){
-        printf("\n Aperte Enter para continuar ");
+        wprintf(L"\n Aperte Enter para continuar ");
         getchar();
+        limpar_buffer();
     }
     #ifdef _WIN32
         system("cls");
