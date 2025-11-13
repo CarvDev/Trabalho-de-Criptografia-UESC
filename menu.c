@@ -12,34 +12,24 @@ void mostra_menu() {
 }
 
 int obter_opcao(int limite) {
-    int opc;
+    int opc; // Variável para armazer a opção selecionada
     int scanf_retorno; // Variável para checar o retorno do scanf
 
     while (1) {
         printf("> "); // caractere '>' para uma melhor exibição do programa no terminal
         
-        // Armazena o valor de retorno do scanf
+        // Armazena o valor de retorno da função scanf
         scanf_retorno = scanf("%d", &opc);
 
-        // Caso 1: O input NÃO FOI UM NÚMERO (ex: 'a')
-        // scanf_retorno será 0
+        // Caso de erro para quando o input NÃO for um número (ex: 'a') (scanf_retorno será 0)
         if (scanf_retorno == 0) {
             printf("[Erro: Digite apenas números]\nTente novamente...\n\n");
             limpar_buffer(); // Limpa o input inválido (ex: 'a\n')
             continue; // Pula para a próxima iteração do loop
-        }
 
-        // Caso 2: FOI UM NÚMERO (scanf_retorno == 1), mas está FORA DO LIMITE
-        if (opc < 1 || opc > limite) {
-            printf("[Opção inválida]\nTente novamente...\n\n");
-        }
-        
-        // Caso 3: SUCESSO! É um número e está dentro do limite
-        if (opc >= 1 && opc <= limite) {
-            break; // Quebra o loop
-        }
+        } else break; // Quebra o loop
     }
     
-    limpar_buffer(); // para limpar o '\n' no buffer, para não quebrar o fgets().
-    return opc;
+    limpar_buffer(); // Limpa o '\n' no buffer, para não quebrar o fgets()
+    return opc; // Retorna a opção selecionada
 }

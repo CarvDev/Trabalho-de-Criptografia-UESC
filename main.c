@@ -98,6 +98,9 @@ int main(void) {
                 limpar_tela(0);
                 printf("\n[Fim do Programa]\n\n");
                 break; 
+            default:
+                printf("[Opção inválida]\nTente novamente...\n\n");
+                break;
         }
     }
     while (opcao != 5);
