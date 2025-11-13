@@ -1,16 +1,18 @@
 #include "criptografia.h"
+#include "auxiliar.h"
+
 #include <stdio.h>
 #include <string.h>
-#include <ctype.h>
-#include "auxiliar.h"
+#include <wchar.h>  // Para wchar_t, wcschr, fgetws, wcslen, etc.
+#include <wctype.h> // Para towupper
 
 #define MOD 29
 #define MAX_COLS 500
 
-char alfabeto[] = {
-    'A','B','C','D','E','F','G','H','I','J','K','L','M',
-    'N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
-    '.', ',', '#'
+wchar_t alfabeto[] = {
+    L'A',L'B',L'C',L'D',L'E',L'F',L'G',L'H',L'I',L'J',L'K',L'L',L'M',
+    L'N',L'O',L'P',L'Q',L'R',L'S',L'T',L'U',L'V',L'W',L'X',L'Y',L'Z',
+    L'.',L',', L'#'
 };
 int alfabeto_tam = 29;
 
@@ -21,25 +23,25 @@ static int mod_pos(int x) {
 }
 
 /* ============== OPERAÇÕES PARA PREPARAR O TEXTO PARA CRIPTOGRAFIA ============== */
-void deixar_maiusculo(char *texto) {
-    for (int i = 0; texto[i] != '\0'; i++) texto[i] = toupper((unsigned char)texto[i]);
+void deixar_maiusculo(wchar_t *texto) {
+    for (int i = 0; texto[i] != L'\0'; i++) texto[i] = towupper(texto[i]);
 }
 
-int detectar_acento(char letra) {
-    if (strchr("ÃÕ", letra)) return -1;
-    if (strchr("ÁÉÍÓÚ", letra)) return -2;
-    if (strchr("ÂÊÎÔÛ", letra)) return -3;
-    if (strchr("ÀÈÌÒÙ", letra)) return -4;
-    if (strchr("Ç", letra)) return -5;
+int detectar_acento(wchar_t letra) {
+    if (wcschr(L"ÃÕ", letra)) return -1;
+    if (wcschr(L"ÁÉÍÓÚ", letra)) return -2;
+    if (wcschr(L"ÂÊÎÔÛ", letra)) return -3;
+    if (wcschr(L"ÀÈÌÒÙ", letra)) return -4;
+    if (wcschr(L"Ç", letra)) return -5;
     return 0;
 }
 
-void tirar_acento(char *texto, int *tamanho, int marcadores[2][MAX_COLS]) {
+void tirar_acento(wchar_t *texto, int *tamanho, int marcadores[2][MAX_COLS]) {
     if ((*tamanho) % 2 != 0) {
         (*tamanho)++;
-        texto[*tamanho] = '#';
+        texto[*tamanho] = L'#';
         (*tamanho)++;
-        texto[*tamanho] = '\0';
+        texto[*tamanho] = L'\0';
     }
 
     int metade = *tamanho / 2;
@@ -48,39 +50,45 @@ void tirar_acento(char *texto, int *tamanho, int marcadores[2][MAX_COLS]) {
         for (int j = 0; j < MAX_COLS; j++)
             marcadores[i][j] = 0;
 
-    for (int i = 0; i < *tamanho && texto[i] != '\0'; i++) {
-        unsigned char letra = texto[i];
+    for (int i = 0; i < *tamanho && texto[i] != L'\0'; i++) {
+        wchar_t letra = texto[i];
         int marcador = detectar_acento(letra);
 
         if (marcador != 0) {
-            if (strchr("ÃÁÂÀ", letra)) letra = 'A';
-            else if (strchr("ÕÓÔÒ", letra)) letra = 'O';
-            else if (strchr("ÉÊÈ", letra)) letra = 'E';
-            else if (strchr("ÍÎÌ", letra)) letra = 'I';
-            else if (strchr("ÚÛÙ", letra)) letra = 'U';
-            else if (strchr("Ç", letra)) letra = 'C';
+            if (wcschr(L"ÃÁÂÀ", letra)) letra = L'A';
+            else if (wcschr(L"ÕÓÔÒ", letra)) letra = L'O';
+            else if (wcschr(L"ÉÊÈ", letra)) letra = L'E';
+            else if (wcschr(L"ÍÎÌ", letra)) letra = L'I';
+            else if (wcschr(L"ÚÛÙ", letra)) letra = L'U';
+            else if (wcschr(L"Ç", letra)) letra = L'C';
         }
 
         texto[i] = letra;
 
-        if (i < metade) marcadores[0][i] = marcador;
-        else marcadores[1][i - metade] = marcador;
+        if (i % 2 == 0) {
+            marcadores[0][i / 2] = marcador;
+        } else {
+            marcadores[1][i / 2] = marcador;
+        }
     }
 
-    texto[*tamanho] = '\0';
+    texto[*tamanho] = L'\0';
 }
 
 /* ============ OPÇÃO 2 DO MENU ============ */
-void obter_texto(char *texto, int *tamanho, int marcadores[2][MAX_COLS]) {
-    printf("\nDigite o texto que deseja criptografar:\n > ");
-    if (!fgets(texto, *tamanho + 2, stdin)) {
-        texto[0] = '\0';
+void obter_texto(wchar_t *texto, int *tamanho, int marcadores[2][MAX_COLS]) {
+    wprintf(L"\nDigite o texto que deseja criptografar:\n > ");
+    
+    // fgetws para ler wide strings
+    if (!fgetws(texto, *tamanho, stdin)) {
+        texto[0] = L'\0';
         *tamanho = 0;
         return;
     }
-    *tamanho = strlen(texto);
-    if (*tamanho > 0 && texto[*tamanho - 1] == '\n') {
-        texto[*tamanho - 1] = '\0';
+    
+    *tamanho = wcslen(texto); 
+    if (*tamanho > 0 && texto[*tamanho - 1] == L'\n') {
+        texto[*tamanho - 1] = L'\0';
         (*tamanho)--;
     }
 
@@ -88,11 +96,11 @@ void obter_texto(char *texto, int *tamanho, int marcadores[2][MAX_COLS]) {
     tirar_acento(texto, tamanho, marcadores);
 }
 
-void numerar_texto(char *texto, int tamanho, int texto_numerado[2][MAX_COLS]) {
+void numerar_texto(wchar_t *texto, int tamanho, int texto_numerado[2][MAX_COLS]) {
     if (tamanho % 2 != 0) {
-        texto[tamanho] = '#';
+        texto[tamanho] = L'#';
         tamanho++;
-        texto[tamanho] = '\0';
+        texto[tamanho] = L'\0';
     }
 
     int colunas = tamanho / 2;
@@ -173,45 +181,45 @@ char* obter_texto_codificado_marcado(int texto_criptografado[2][MAX_COLS], int m
 }
 
 /* ======================= DESCRIPTOGRAFAR ======================= */
-const char* aplicar_acento(char base, int marcador) {
-    if (marcador == -1 && base == 'A') return "Ã";
-    if (marcador == -1 && base == 'O') return "Õ";
+const wchar_t* aplicar_acento(wchar_t base, int marcador) {
+    if (marcador == -1 && base == L'A') return L"Ã";
+    if (marcador == -1 && base == L'O') return L"Õ";
 
-    if (marcador == -2 && base == 'A') return "Á";
-    if (marcador == -2 && base == 'E') return "É";
-    if (marcador == -2 && base == 'I') return "Í";
-    if (marcador == -2 && base == 'O') return "Ó";
-    if (marcador == -2 && base == 'U') return "Ú";
+    if (marcador == -2 && base == L'A') return L"Á";
+    if (marcador == -2 && base == L'E') return L"É";
+    if (marcador == -2 && base == L'I') return L"Í";
+    if (marcador == -2 && base == L'O') return L"Ó";
+    if (marcador == -2 && base == L'U') return L"Ú";
 
-    if (marcador == -3 && base == 'A') return "Â";
-    if (marcador == -3 && base == 'E') return "Ê";
-    if (marcador == -3 && base == 'I') return "Î";
-    if (marcador == -3 && base == 'O') return "Ô";
-    if (marcador == -3 && base == 'U') return "Û";
+    if (marcador == -3 && base == L'A') return L"Â";
+    if (marcador == -3 && base == L'E') return L"Ê";
+    if (marcador == -3 && base == L'I') return L"Î";
+    if (marcador == -3 && base == L'O') return L"Ô";
+    if (marcador == -3 && base == L'U') return L"Û";
 
-    if (marcador == -4 && base == 'A') return "À";
-    if (marcador == -4 && base == 'E') return "È";
-    if (marcador == -4 && base == 'I') return "Ì";
-    if (marcador == -4 && base == 'O') return "Ò";
-    if (marcador == -4 && base == 'U') return "Ù";
+    if (marcador == -4 && base == L'A') return L"À";
+    if (marcador == -4 && base == L'E') return L"È";
+    if (marcador == -4 && base == L'I') return L"Ì";
+    if (marcador == -4 && base == L'O') return L"Ò";
+    if (marcador == -4 && base == L'U') return L"Ù";
 
-    if (marcador == -5 && base == 'C') return "Ç";
+    if (marcador == -5 && base == L'C') return L"Ç";
 
-    static char s[2] = {0,0};
+    static wchar_t s[2] = {0,0};
     s[0] = base;
-    s[1] = '\0';
+    s[1] = L'\0';
     return s;
 }
-static void concatenar(char *destino, const char *origem, size_t tamanho_max) {
-    size_t tamanho_destino = strlen(destino);
-    size_t tamanho_origem = strlen(origem);
+static void concatenar(wchar_t *destino, const wchar_t *origem, size_t tamanho_max) {
+    size_t tamanho_destino = wcslen(destino);
+    size_t tamanho_origem = wcslen(origem);
 
     if (tamanho_destino + tamanho_origem + 1 > tamanho_max) {
         if (tamanho_destino < tamanho_max - 1) {
-            strncat(destino, origem, tamanho_max - tamanho_destino - 1);
+            wcsncat(destino, origem, tamanho_max - tamanho_destino - 1);
         }
     } else {
-        strcat(destino, origem);
+        wcscat(destino, origem);
     }
 }
 
@@ -237,18 +245,19 @@ void descriptografar(int matriz_inv[2][2], int texto_criptografado[2][MAX_COLS],
     }
 }
 
-char* obter_texto_descriptografado(int texto_numerado[2][MAX_COLS], int marcadores[2][MAX_COLS], int tamanho) {
-    static char texto_final[2000];
-    texto_final[0] = '\0';
+const wchar_t* obter_texto_descriptografado(int texto_numerado[2][MAX_COLS], int marcadores[2][MAX_COLS], int tamanho) {
+    static wchar_t texto_final[2000];
+    texto_final[0] = L'\0';
     int metade = tamanho / 2;
 
     for (int i = 0; i < metade; i++) {
         int indice1 = texto_numerado[0][i] - 1;
         int indice2 = texto_numerado[1][i] - 1;
-        char base1 = (indice1 >= 0 && indice1 < alfabeto_tam) ? alfabeto[indice1] : '?';
-        char base2 = (indice2 >= 0 && indice2 < alfabeto_tam) ? alfabeto[indice2] : '?';
-        concatenar(texto_final, aplicar_acento(base1, marcadores[0][i]), sizeof(texto_final));
-        concatenar(texto_final, aplicar_acento(base2, marcadores[1][i]), sizeof(texto_final));
+        wchar_t base1 = (indice1 >= 0 && indice1 < alfabeto_tam) ? alfabeto[indice1] : L'?';
+        wchar_t base2 = (indice2 >= 0 && indice2 < alfabeto_tam) ? alfabeto[indice2] : L'?';
+        concatenar(texto_final, aplicar_acento(base1, marcadores[0][i]), 2000); 
+        concatenar(texto_final, aplicar_acento(base2, marcadores[1][i]), 2000); 
+        // tamanho_max não pode mais receber sizeof(). Isso causaria um erro, uma vez que o tamanho em bytes de um wchar_t é diferente 
     }
     return texto_final;
 }
