@@ -1,14 +1,14 @@
-#include <stdio.h>
+#include <wchar.h>
 #include "menu.h"
 #include "auxiliar.h"
 
 void mostra_menu() {
-    printf("Digite a opcao desejada:\n"
-        " 1. Criar uma matriz de criptografia\n"
-        " 2. Criar um texto para ser criptografado\n"
-        " 3. Criptografar Texto\n"
-        " 4. Descriptografar Texto\n"
-        " 5. Sair do sistema\n");
+    wprintf(L"Digite a opcao desejada:\n"
+        L" 1. Criar uma matriz de criptografia\n"
+        L" 2. Criar um texto para ser criptografado\n"
+        L" 3. Criptografar Texto\n"
+        L" 4. Descriptografar Texto\n"
+        L" 5. Sair do sistema\n");
 }
 
 int obter_opcao(int limite) {
@@ -16,14 +16,14 @@ int obter_opcao(int limite) {
     int scanf_retorno; // Variável para checar o retorno do scanf
 
     while (1) {
-        printf("> "); // caractere '>' para uma melhor exibição do programa no terminal
+        wprintf(L"> "); // caractere '>' para uma melhor exibição do programa no terminal
         
         // Armazena o valor de retorno da função scanf
-        scanf_retorno = scanf("%d", &opc);
+        scanf_retorno = wscanf(L"%d", &opc);
 
         // Caso de erro para quando o input NÃO for um número (ex: 'a') (scanf_retorno será 0)
         if (scanf_retorno == 0) {
-            printf("[Erro: Digite apenas números]\nTente novamente...\n\n");
+            wprintf(L"[Erro: Digite apenas números]\nTente novamente...\n\n");
             limpar_buffer(); // Limpa o input inválido (ex: 'a\n')
             continue; // Pula para a próxima iteração do loop
 
