@@ -9,12 +9,24 @@
 #include "criptografia.h"
 #include "auxiliar.h"
 
+// para corrigir problema de codificação de carecteres wide no Windows 
+#ifdef _WIN32
+    #include <io.h>
+    #include <fcntl.h>
+#endif
+
 int main(void) {
     // funções básicas para o funcionamento do prorgama:
     setlocale(LC_ALL, ""); // para usar acentos, etc.
     srand(time(NULL)); // semente para os números aleatórios.
 
-    // declarando variáveis globais:
+    // força o stdin e stdout no Windows a usar o modo "wide" (UTF-16)
+    #ifdef _WIN32
+        _setmode(_fileno(stdout), _O_U16TEXT);
+        _setmode(_fileno(stdin),  _O_U16TEXT);
+    #endif
+
+    // declarando variáveis globais:    
     int opcao;
     int matriz_cript[MAT][MAT];
     int matriz_decript[MAT][MAT];
@@ -24,7 +36,7 @@ int main(void) {
     int marcadores[2][500];
     int texto_numerado[2][500];
     
-    char* texto_cripto;
+    const wchar_t* texto_cripto;
     int texto_cripto_numerado[2][500];
 
     wchar_t salvar_texto[1000];
@@ -69,7 +81,7 @@ int main(void) {
                     texto_cripto_criado = 1;
                     wprintf(L"\n--------------------------------------------------\n");
                     wprintf(L"\nTexto original: %ls\n",salvar_texto);
-                    wprintf(L"\nTexto criptografado: %s\n", texto_cripto);
+                    wprintf(L"\nTexto criptografado: %ls\n", texto_cripto);
                     wprintf(L"\n--------------------------------------------------\n");
                     limpar_tela(1);
                     break;
@@ -86,7 +98,7 @@ int main(void) {
                     descriptografar(matriz_decript, texto_cripto_numerado, texto_numerado, tamanho_texto);
                     texto_descripto = obter_texto_descriptografado(texto_numerado, marcadores, tamanho_texto);
                     wprintf(L"\n--------------------------------------------------\n");
-                    wprintf(L"\nTexto criptografado: %s\n", texto_cripto);
+                    wprintf(L"\nTexto criptografado: %ls\n", texto_cripto);
                     wprintf(L"\nTexto descriptografado: %ls\n", texto_descripto);
                     wprintf(L"\n--------------------------------------------------\n");
                     limpar_tela(1);
