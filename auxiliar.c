@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <wchar.h>
 
@@ -21,8 +20,7 @@ int gerar_num() {
 void limpar_tela(int op) {
     if (op == 1){
         wprintf(L"\n Aperte Enter para continuar ");
-        getchar();
-        limpar_buffer();
+        getwchar();
     }
     #ifdef _WIN32
         system("cls");
