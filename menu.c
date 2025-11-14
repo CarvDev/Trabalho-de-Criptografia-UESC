@@ -11,7 +11,7 @@ void mostra_menu() {
         L" 5. Sair do sistema\n");
 }
 
-int obter_opcao(int limite) {
+int obter_opcao() {
     int opc; // Variável para armazer a opção selecionada
     int scanf_retorno; // Variável para checar o retorno do scanf
 
