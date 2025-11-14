@@ -75,23 +75,32 @@ void tirar_acento(wchar_t *texto, int *tamanho, int marcadores[2][MAX_COLS]) {
 
 /* ============ OPÇÃO 2 DO MENU ============ */
 void obter_texto(wchar_t *texto, int *tamanho, int marcadores[2][MAX_COLS]) {
-    wprintf(L"\nDigite o texto que deseja criptografar:\n > ");
-    
-    // fgetws para ler wide strings
-    if (!fgetws(texto, *tamanho, stdin)) {
-        texto[0] = L'\0';
-        *tamanho = 0;
-        return;
-    }
-    
-    *tamanho = wcslen(texto); 
-    if (*tamanho > 0 && texto[*tamanho - 1] == L'\n') {
-        texto[*tamanho - 1] = L'\0';
-        (*tamanho)--;
-    }
+    while (1) {
+        *tamanho = MAX_COLS;
+        wprintf(L"\nDigite o texto que deseja criptografar:\n > ");
 
-    deixar_maiusculo(texto);
-    tirar_acento(texto, tamanho, marcadores);
+        // lê o input do usuário
+        fgetws(texto, *tamanho, stdin);
+        
+        // lê o tamanho do texto digitado
+        *tamanho = wcslen(texto); 
+        
+        // remove o '\n', se houver
+        if (texto[*tamanho - 1] == L'\n') {
+                texto[*tamanho - 1] = L'\0';
+                (*tamanho)--;
+        }
+
+        // caso de erro para string vazia  
+        if (*tamanho == 0) {
+            wprintf(L"\n[Erro: o texto para criptografia não pode ser vazio!]\n");
+            limpar_tela(1);
+        } else {
+            deixar_maiusculo(texto);
+            tirar_acento(texto, tamanho, marcadores);
+            break;
+        }
+    }
 }
 
 void numerar_texto(wchar_t *texto, int tamanho, int texto_numerado[2][MAX_COLS]) {
