@@ -155,28 +155,39 @@ void criptografar(int matriz_cript[2][2],
     }
 }
 
-char* obter_texto_codificado_marcado(int texto_criptografado[2][MAX_COLS], int marcadores[2][MAX_COLS], int tamanho) {
-    static char texto_codificado[5000];
+const wchar_t* obter_texto_codificado_marcado(int texto_criptografado[2][MAX_COLS], int marcadores[2][MAX_COLS], int tamanho) {
+    static wchar_t texto_codificado[5000];
     int colunas = tamanho / 2;
-    int pos = 0;
+    int pos = 0; // Posição atual na string
+
+    // Garante que a string está vazia antes de começar
+    texto_codificado[0] = L'\0';
 
     for (int i = 0; i < colunas; i++) {
         for (int linha = 0; linha < 2; linha++) {
             int valor = texto_criptografado[linha][i];
             int marcador = marcadores[linha][i];
 
-            pos += sprintf(&texto_codificado[pos], "%d", valor);
+            // Condicional que evita estourar o buffer, deixando espaço para os próximos números e '\0'
+            if (pos >= 4950) break; 
+
+            pos += swprintf(&texto_codificado[pos], 5000 - pos, L"%d", valor);
 
             if (marcador != 0) {
-                pos += sprintf(&texto_codificado[pos], "%d", marcador);
+                if (pos >= 4950) break;
+
+                pos += swprintf(&texto_codificado[pos], 5000 - pos, L"%d", marcador);
             }
 
-            texto_codificado[pos++] = ' ';
+            if (pos >= 4950) break;
+
+            texto_codificado[pos++] = L' ';
         }
     }
 
-    if (pos > 0) texto_codificado[pos - 1] = '\0';
-    else texto_codificado[0] = '\0';
+    if (pos > 0) texto_codificado[pos - 1] = L'\0'; 
+    else texto_codificado[0] = L'\0';
+
     return texto_codificado;
 }
 
