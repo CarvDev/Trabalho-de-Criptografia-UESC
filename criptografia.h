@@ -22,7 +22,7 @@ void obter_texto(wchar_t *texto, int *tamanho, int marcadores[2][MAX_COLS]);
 void numerar_texto(wchar_t *texto, int tamanho, int texto_numerado[2][MAX_COLS]);
 
 // ===================== CRIPTOGRAFIA =====================
-void criptografar(int matriz_cript[2][2], int texto_enumerado[2][MAX_COLS], int texto_criptografado[2][MAX_COLS], int tamanho, int marcadores[2][MAX_COLS]);
+void criptografar(int matriz_cript[2][2], int texto_enumerado[2][MAX_COLS], int texto_criptografado[2][MAX_COLS], int tamanho);
 const wchar_t* obter_texto_codificado_marcado(int texto_criptografado[2][MAX_COLS], int marcadores[2][MAX_COLS], int tamanho);
 
 // ===================== DESCRIPTOGRAFIA =====================

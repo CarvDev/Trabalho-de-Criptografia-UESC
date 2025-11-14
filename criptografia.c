@@ -7,7 +7,7 @@
 #include <wctype.h> // Para towupper
 
 #define MOD 29
-#define MAX_COLS 500
+#define MAX_COLS 500    
 
 wchar_t alfabeto[] = {
     L'A',L'B',L'C',L'D',L'E',L'F',L'G',L'H',L'I',L'J',L'K',L'L',L'M',
@@ -43,8 +43,6 @@ void tirar_acento(wchar_t *texto, int *tamanho, int marcadores[2][MAX_COLS]) {
         (*tamanho)++;
         texto[*tamanho] = L'\0';
     }
-
-    int metade = *tamanho / 2;
 
     for (int i = 0; i < 2; i++)
         for (int j = 0; j < MAX_COLS; j++)
@@ -134,7 +132,7 @@ void numerar_texto(wchar_t *texto, int tamanho, int texto_numerado[2][MAX_COLS])
 void criptografar(int matriz_cript[2][2],
                   int texto_enumerado[2][MAX_COLS],
                   int texto_criptografado[2][MAX_COLS],
-                  int tamanho, int marcadores[2][MAX_COLS]) {
+                  int tamanho) {
     int colunas = tamanho / 2;
 
     for (int i = 0; i < colunas; i++) {
