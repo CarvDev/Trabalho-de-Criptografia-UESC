@@ -48,7 +48,7 @@ int main(void) {
 
     do {
         mostra_menu();
-        opcao = obter_opcao(5);
+        opcao = obter_opcao();
         switch (opcao)
         {
             case 1:
@@ -75,7 +75,7 @@ int main(void) {
                 limpar_tela(0);
                 if(matriz_criada == 1 && texto_criado == 1){
 
-                    criptografar(matriz_cript, texto_numerado, texto_cripto_numerado, tamanho_texto, marcadores);
+                    criptografar(matriz_cript, texto_numerado, texto_cripto_numerado, tamanho_texto);
                     texto_cripto = obter_texto_codificado_marcado(texto_cripto_numerado, marcadores, tamanho_texto);
                 
                     texto_cripto_criado = 1;
