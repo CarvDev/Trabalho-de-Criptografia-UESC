@@ -2,6 +2,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+
+// API do Windows
+#ifdef _WIN32
+    #include <windows.h>
+#endif
+
 #include "menu.h"
 #include "matrizes.h"
 #include "criptografia.h"
@@ -9,7 +15,16 @@
 
 int main(void) {
     // funções básicas para o funcionamento do prorgama:
-    setlocale(LC_ALL, ""); // para usar acentos, etc.
+    #ifdef _WIN32
+        /* Código para Windows (para forçar a codificação dos caracteres UTF8)
+        (para usar acentos, etc.) */
+        SetConsoleOutputCP(CP_UTF8);
+        SetConsoleCP(CP_UTF8);
+    #else
+        // Código para Linux, macOS, etc. (para usar acentos, etc.)
+        setlocale(LC_ALL, ""); 
+    #endif
+    
     srand(time(NULL)); // semente para os números aleatórios.
 
     // declarando variáveis globais:
