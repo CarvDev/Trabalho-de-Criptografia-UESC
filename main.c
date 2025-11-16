@@ -92,7 +92,7 @@ int main(void) {
 
                 } 
             case 4:
-                // limpar_tela(0);
+                limpar_tela(0);
                 if(texto_cripto_criado == 1){
 
                     descriptografar(matriz_decript, texto_cripto_numerado, texto_numerado, tamanho_texto);
@@ -110,7 +110,7 @@ int main(void) {
                     break;
                 }
             case 5:
-                // limpar_tela(0);
+                limpar_tela(0);
                 wprintf(L"\n[Fim do Programa]\n\n");
                 break; 
             default:
