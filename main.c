@@ -62,6 +62,11 @@ int main(void) {
                 break;
             case 2:
                 limpar_tela(0);
+                if (salvar_texto != NULL) { // usamos malloc né? tem que liberar pra evitar memory leak
+                  free(salvar_texto);
+                  salvar_texto = NULL;
+                }
+
                 obter_texto(texto, &tamanho_texto, tamanho_buffer, marcadores,&salvar_texto);
                 numerar_texto(texto, tamanho_texto, texto_numerado);
                 texto_criado = 1;
@@ -109,6 +114,10 @@ int main(void) {
                 }
             case 5:
                 limpar_tela(0);
+                if (salvar_texto != NULL) { // usamos malloc né? tem que liberar
+                    free(salvar_texto);
+                    salvar_texto = NULL;
+                }
                 printf("\n[Fim do Programa]\n\n");
                 break; 
             default:
