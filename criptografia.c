@@ -3,6 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 #include "auxiliar.h"
+#include "UTF8.h"
 
 #define MOD 29
 #define MAX_COLS 500
@@ -21,71 +22,138 @@ static int mod_pos(int x) {
 }
 
 /* ============== OPERAÇÕES PARA PREPARAR O TEXTO PARA CRIPTOGRAFIA ============== */
-void deixar_maiusculo(char *texto) {
-    for (int i = 0; texto[i] != '\0'; i++) texto[i] = toupper((unsigned char)texto[i]);
-}
 
-int detectar_acento(char letra) {
-    if (strchr("ÃÕ", letra)) return -1;
-    if (strchr("ÁÉÍÓÚ", letra)) return -2;
-    if (strchr("ÂÊÎÔÛ", letra)) return -3;
-    if (strchr("ÀÈÌÒÙ", letra)) return -4;
-    if (strchr("Ç", letra)) return -5;
-    return 0;
-}
+// Verifica se um caractere pertence ao alfabeto do projeto.
+int eh_do_alfabeto(char c) {
 
-void tirar_acento(char *texto, int *tamanho, int marcadores[2][MAX_COLS]) {
-    if ((*tamanho) % 2 != 0) {
-        (*tamanho)++;
-        texto[*tamanho] = '#';
-        (*tamanho)++;
-        texto[*tamanho] = '\0';
+    for (int k = 0; k < alfabeto_tam; k++) {
+        if (c == alfabeto[k]) {
+            return 1; // Verdadeiro (é do alfabeto)
+        }
     }
+    return 0; // Falso (não é do alfabeto)
+}
 
-    int metade = *tamanho / 2;
+// Substitui deixar_maiusculo, detectar_acento e tirar_acento.
+void normalizar_texto(char *texto, int *tamanho, int marcadores[2][MAX_COLS], char alfabeto[], int alfabeto_tam) {
+    int tam_original = *tamanho;
+    char texto_normalizado[2000]; // Buffer temporário
+    int j = 0; // Índice do texto normalizado (caracteres lógicos)
+    int i = 0; // Índice do texto original (bytes)
 
-    for (int i = 0; i < 2; i++)
-        for (int j = 0; j < MAX_COLS; j++)
-            marcadores[i][j] = 0;
+    // 1. Limpa os marcadores
+    for (int r = 0; r < 2; r++)
+        for (int c = 0; c < MAX_COLS; c++)
+            marcadores[r][c] = 0;
 
-    for (int i = 0; i < *tamanho && texto[i] != '\0'; i++) {
-        unsigned char letra = texto[i];
-        int marcador = detectar_acento(letra);
+    // 2. Loop de normalização (lê bytes, escreve caracteres)
+    while (i < tam_original) {
+        unsigned char byte1 = (unsigned char)texto[i];
+        int marcador = 0;
+        char letra_final = '?'; // Default caso não seja do alfabeto
 
-        if (marcador != 0) {
-            if (strchr("ÃÁÂÀ", letra)) letra = 'A';
-            else if (strchr("ÕÓÔÒ", letra)) letra = 'O';
-            else if (strchr("ÉÊÈ", letra)) letra = 'E';
-            else if (strchr("ÍÎÌ", letra)) letra = 'I';
-            else if (strchr("ÚÛÙ", letra)) letra = 'U';
-            else if (strchr("Ç", letra)) letra = 'C';
+        // É um caractere ASCII simples (1 byte)?
+        if (byte1 <= 127) {
+            
+            // Verifica se é um espaço
+            if (byte1 == ' ') {
+                letra_final = '#';
+            } else {
+                letra_final = toupper(byte1); // Converte para maiúscula
+            }
+            i++; // Avança 1 byte
+        
+        // É um caractere UTF-8 de 2 bytes (acentos)?
+        // 0xC3 é um sinalizador padrão para todo primeiro bit de caractere acentuado
+        // && i + 1 < tam_original previne overflow
+        } else if (byte1 == 0xC3 && i + 1 < tam_original) {
+            unsigned char byte2 = (unsigned char)texto[i+1];
+            
+            // Til
+            if (byte2 == A_TIL || byte2 == a_til) { letra_final = 'A'; marcador = -1; } // Ã
+            else if (byte2 == O_TIL || byte2 == o_til) { letra_final = 'O'; marcador = -1; } // Õ
+            // Agudo
+            else if (byte2 == A_AGUDO || byte2 == a_agudo) { letra_final = 'A'; marcador = -2; } // Á
+            else if (byte2 == E_AGUDO || byte2 == e_agudo) { letra_final = 'E'; marcador = -2; } // É
+            else if (byte2 == I_AGUDO || byte2 == i_agudo) { letra_final = 'I'; marcador = -2; } // Í
+            else if (byte2 == O_AGUDO || byte2 == o_agudo) { letra_final = 'O'; marcador = -2; } // Ó
+            else if (byte2 == U_AGUDO || byte2 == u_agudo) { letra_final = 'U'; marcador = -2; } // Ú
+            // Circunflexo
+            else if (byte2 == A_CIRC || byte2 == a_circ) { letra_final = 'A'; marcador = -3; } // Â
+            else if (byte2 == E_CIRC || byte2 == e_circ) { letra_final = 'E'; marcador = -3; } // Ê
+            else if (byte2 == I_CIRC || byte2 == i_circ) { letra_final = 'I'; marcador = -3; } // Î
+            else if (byte2 == O_CIRC || byte2 == o_circ) { letra_final = 'O'; marcador = -3; } // Ô
+            else if (byte2 == U_CIRC || byte2 == u_circ) { letra_final = 'U'; marcador = -3; } // Û
+            // Grave
+            else if (byte2 == A_GRAVE || byte2 == a_grave) { letra_final = 'A'; marcador = -4; } // À
+            else if (byte2 == E_GRAVE || byte2 == e_grave) { letra_final = 'E'; marcador = -4; } // È
+            else if (byte2 == I_GRAVE || byte2 == i_grave) { letra_final = 'I'; marcador = -4; } // Ì
+            else if (byte2 == O_GRAVE || byte2 == o_grave) { letra_final = 'O'; marcador = -4; } // Ò
+            else if (byte2 == U_GRAVE || byte2 == u_grave) { letra_final = 'U'; marcador = -4; } // Ù
+            // Cedilha
+            else if (byte2 == C_CEDILHA || byte2 == c_cedilha) { letra_final = 'C'; marcador = -5; } // Ç
+            else {
+                letra_final = '?'; // Para byte desconhecido
+            }
+            
+            i += 2; // Avança 2 bytes
+        
+        // É outro tipo de caractere UTF-8 (3 ou 4 bytes) ou um byte inválido
+        } else {
+            letra_final = '?'; // Trata como lixo
+            i++;
         }
 
-        texto[i] = letra;
-
-        if (i < metade) marcadores[0][i] = marcador;
-        else marcadores[1][i - metade] = marcador;
+        // 3. Salva apenas se for parte do alfabeto
+        if (eh_do_alfabeto(letra_final)) {
+            
+            // Armazena no texto normalizado
+            texto_normalizado[j] = letra_final;
+            
+            // Armazena o marcador na posição lógica correta
+            int linha = j % 2;  // 0 para o primeiro char do par, 1 para o segundo
+            int coluna = j / 2; // O índice do par (coluna da matriz)
+            
+            if (coluna < MAX_COLS) { // Prevenção de overflow
+                marcadores[linha][coluna] = marcador;
+            }
+            
+            j++;
+        }
+        // Se não for válido (espaço, etc), é simplesmente descartado (não incrementa 'j')
+    }
+    
+    // 4. Termina a string normalizada
+    texto_normalizado[j] = '\0';
+    *tamanho = j; // O novo tamanho é o número de caracteres lógicos
+    
+    // 5. Adiciona padding (agora com o tamanho correto)
+    if ((*tamanho) % 2 != 0) {
+        texto_normalizado[*tamanho] = '#';
+        (*tamanho)++;
+        texto_normalizado[*tamanho] = '\0';
     }
 
-    texto[*tamanho] = '\0';
+    // 6. Copia de volta para o buffer original
+    strcpy(texto, texto_normalizado);
 }
 
 /* ============ OPÇÃO 2 DO MENU ============ */
-void obter_texto(char *texto, int *tamanho, int marcadores[2][MAX_COLS]) {
+void obter_texto(char *texto, int *tamanho, int tamanho_buffer,  int marcadores[2][MAX_COLS]) {
     printf("\nDigite o texto que deseja criptografar:\n > ");
-    if (!fgets(texto, *tamanho + 2, stdin)) {
+    if (!fgets(texto, tamanho_buffer, stdin)) {
         texto[0] = '\0';
         *tamanho = 0;
         return;
     }
-    *tamanho = strlen(texto);
+
+    *tamanho = strlen(texto); // *tamanho se torna o tamanho real do texto
     if (*tamanho > 0 && texto[*tamanho - 1] == '\n') {
         texto[*tamanho - 1] = '\0';
         (*tamanho)--;
     }
 
-    deixar_maiusculo(texto);
-    tirar_acento(texto, tamanho, marcadores);
+    normalizar_texto(texto, tamanho, marcadores, alfabeto, alfabeto_tam);
 }
 
 void numerar_texto(char *texto, int tamanho, int texto_numerado[2][MAX_COLS]) {

@@ -14,12 +14,10 @@ extern char alfabeto[];
 extern int alfabeto_tam;
 
 // ===================== PREPARAÇÃO DO TEXTO =====================
-void deixar_maiusculo(char *texto);
-int detectar_acento(char letra);
-void tirar_acento(char *texto, int *tamanho, int marcadores[2][MAX_COLS]);
+void normalizar_texto(char *texto, int *tamanho, int marcadores[2][MAX_COLS], char alfabeto[], int alfabeto_tam);
 
 // ===================== ENTRADA E NUMERAÇÃO =====================
-void obter_texto(char *texto, int *tamanho, int marcadores[2][MAX_COLS]);
+void obter_texto(char *texto, int *tamanho, int tamanho_buffer, int marcadores[2][MAX_COLS]);
 void numerar_texto(char *texto, int tamanho, int texto_numerado[2][MAX_COLS]);
 
 // ===================== CRIPTOGRAFIA =====================

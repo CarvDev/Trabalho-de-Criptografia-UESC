@@ -9,7 +9,7 @@
 
 int main(void) {
     // funções básicas para o funcionamento do prorgama:
-    setlocale(LC_ALL, "Portuguese"); // para usar acentos, etc.
+    setlocale(LC_ALL, ""); // para usar acentos, etc.
     srand(time(NULL)); // semente para os números aleatórios.
 
     // declarando variáveis globais:
@@ -17,7 +17,8 @@ int main(void) {
     int matriz_cript[MAT][MAT];
     int matriz_decript[MAT][MAT];
     char texto[500];
-    int tamanho_texto = sizeof(texto);
+    int tamanho_buffer = sizeof(texto); // tamanho máximo do texto
+    int tamanho_texto; // tamanho real do texto (será atribuido)
     int marcadores[2][500];
     int texto_numerado[2][500];
     char* texto_cripto;
@@ -46,7 +47,7 @@ int main(void) {
                 break;
             case 2:
                 limpar_tela(0);
-                obter_texto(texto, &tamanho_texto, marcadores);
+                obter_texto(texto, &tamanho_texto, tamanho_buffer, marcadores);
                 numerar_texto(texto, tamanho_texto, texto_numerado);
                 strcpy(salvar_texto, texto);
                 texto_criado = 1;
