@@ -36,7 +36,7 @@ int eh_do_alfabeto(char c) {
 }
 
 // Substitui deixar_maiusculo, detectar_acento e tirar_acento.
-void normalizar_texto(char *texto, int *tamanho, int marcadores[2][MAX_COLS], char alfabeto[], int alfabeto_tam) {
+void normalizar_texto(char *texto, int *tamanho, int marcadores[2][MAX_COLS]) {
     int tam_original = *tamanho;
     char texto_normalizado[2000]; // Buffer temporário
     int j = 0; // Índice do texto normalizado (caracteres lógicos)
@@ -164,7 +164,7 @@ void obter_texto(char *texto, int *tamanho, int tamanho_buffer,  int marcadores[
     *texto_original = malloc(*tamanho + 1);
     strcpy(*texto_original, texto);  
 
-    normalizar_texto(texto, tamanho, marcadores, alfabeto, alfabeto_tam);
+    normalizar_texto(texto, tamanho, marcadores);
 }
 
 void numerar_texto(char *texto, int tamanho, int texto_numerado[2][MAX_COLS]) {
@@ -205,7 +205,7 @@ void numerar_texto(char *texto, int tamanho, int texto_numerado[2][MAX_COLS]) {
 void criptografar(int matriz_cript[2][2],
                   int texto_enumerado[2][MAX_COLS],
                   int texto_criptografado[2][MAX_COLS],
-                  int tamanho, int marcadores[2][MAX_COLS]) {
+                  int tamanho) {
     int colunas = tamanho / 2;
 
     for (int i = 0; i < colunas; i++) {
