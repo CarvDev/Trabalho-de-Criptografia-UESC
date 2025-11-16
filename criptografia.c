@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdlib.h>   
 #include "auxiliar.h"
 #include "UTF8.h"
 
@@ -139,19 +140,29 @@ void normalizar_texto(char *texto, int *tamanho, int marcadores[2][MAX_COLS], ch
 }
 
 /* ============ OPÇÃO 2 DO MENU ============ */
-void obter_texto(char *texto, int *tamanho, int tamanho_buffer,  int marcadores[2][MAX_COLS]) {
-    printf("\nDigite o texto que deseja criptografar:\n > ");
-    if (!fgets(texto, tamanho_buffer, stdin)) {
-        texto[0] = '\0';
-        *tamanho = 0;
-        return;
-    }
+void obter_texto(char *texto, int *tamanho, int tamanho_buffer,  int marcadores[2][MAX_COLS],char **texto_original) {
+    do {
+        printf("\nDigite o texto que deseja criptografar:\n > ");
+        if (!fgets(texto, tamanho_buffer, stdin)) {
+            texto[0] = '\0';
+            *tamanho = 0;
+             return;
+        }
 
-    *tamanho = strlen(texto); // *tamanho se torna o tamanho real do texto
-    if (*tamanho > 0 && texto[*tamanho - 1] == '\n') {
-        texto[*tamanho - 1] = '\0';
-        (*tamanho)--;
-    }
+        *tamanho = strlen(texto); // *tamanho se torna o tamanho real do texto
+        if (*tamanho > 0 && texto[*tamanho - 1] == '\n') {
+            texto[*tamanho - 1] = '\0';
+            (*tamanho)--;
+        }
+        if (*tamanho == 0) {
+            printf("\nTexto vazio! Não há nada a criptografar! Digite um texto válido!\n");
+            limpar_tela(1);
+        }
+    
+    } while (*tamanho == 0);
+
+    *texto_original = malloc(*tamanho + 1);
+    strcpy(*texto_original, texto);  
 
     normalizar_texto(texto, tamanho, marcadores, alfabeto, alfabeto_tam);
 }

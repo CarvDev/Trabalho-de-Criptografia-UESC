@@ -38,7 +38,7 @@ int main(void) {
     int texto_numerado[2][500];
     char* texto_cripto;
     int texto_cripto_numerado[2][500];
-    char salvar_texto[1000];
+    char* salvar_texto = NULL;
     char* texto_descripto;
 
     int matriz_criada = 0;
@@ -62,9 +62,8 @@ int main(void) {
                 break;
             case 2:
                 limpar_tela(0);
-                obter_texto(texto, &tamanho_texto, tamanho_buffer, marcadores);
+                obter_texto(texto, &tamanho_texto, tamanho_buffer, marcadores,&salvar_texto);
                 numerar_texto(texto, tamanho_texto, texto_numerado);
-                strcpy(salvar_texto, texto);
                 texto_criado = 1;
                 texto_cripto_criado = 0;
                 printf("\n[Texto criado e numerado com sucesso!]\n");

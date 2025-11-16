@@ -5,6 +5,9 @@
 #include <string.h>
 #include <ctype.h>
 #include "auxiliar.h"
+#include <ctype.h>
+#include <stdlib.h>   
+#include "UTF8.h"
 
 #define MOD 29
 #define MAX_COLS 500
@@ -17,7 +20,7 @@ extern int alfabeto_tam;
 void normalizar_texto(char *texto, int *tamanho, int marcadores[2][MAX_COLS], char alfabeto[], int alfabeto_tam);
 
 // ===================== ENTRADA E NUMERAÇÃO =====================
-void obter_texto(char *texto, int *tamanho, int tamanho_buffer, int marcadores[2][MAX_COLS]);
+void obter_texto(char *texto, int *tamanho, int tamanho_buffer, int marcadores[2][MAX_COLS], char **texto_original);
 void numerar_texto(char *texto, int tamanho, int texto_numerado[2][MAX_COLS]);
 
 // ===================== CRIPTOGRAFIA =====================
