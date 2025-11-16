@@ -64,27 +64,3 @@ void preencher_mat_decript(int (*mat_cript)[MAT], int (*mat_decript)[MAT]) {
         }
     }
 }
-
-
-
-void imprimir_matriz_float(float (*mat)[MAT]) {
-
-    for (int linha = 0; linha < MAT; linha++) {
-    
-        for (int coluna = 0; coluna < MAT; coluna++) {
-            printf("%.4f ", mat[linha][coluna]);
-        }
-        printf("\n");
-    }
-}
-
-void imprimir_matriz_int(int (*mat)[MAT]) {
-    
-    for (int linha = 0; linha < MAT; linha++) {
-        
-        for (int coluna = 0; coluna < MAT; coluna++) {
-            printf("%d ", mat[linha][coluna]);
-        }
-        printf("\n");
-    }
-}

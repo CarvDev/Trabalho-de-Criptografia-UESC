@@ -12,8 +12,4 @@ int calcular_determinante(int (*mat)[MAT]);
 // calcula a matriz de descriptografia
 void preencher_mat_decript(int (*mat_cript)[MAT], int (*mat_decript)[MAT]);
 
-// imprime matrizes
-void imprimir_matriz_float(float (*mat)[MAT]);
-void imprimir_matriz_int(int (*mat)[MAT]);
-
 #endif
