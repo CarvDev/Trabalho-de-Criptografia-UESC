@@ -28,5 +28,4 @@ char* obter_texto_codificado_marcado(int texto_criptografado[2][MAX_COLS], int m
 const char* aplicar_acento(char base, int marcador);
 void descriptografar(int matriz_inv[2][2], int texto_criptografado[2][MAX_COLS], int texto_numerado[2][MAX_COLS], int tamanho);
 char* obter_texto_descriptografado(int texto_numerado[2][MAX_COLS], int marcadores[2][MAX_COLS], int tamanho);
-static void concatenar(char *destino, const char *origem, size_t tamanho_max);
 #endif // CRIPTOGRAFIA_H
